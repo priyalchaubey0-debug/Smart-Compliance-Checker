@@ -1,0 +1,17 @@
+1. Data Processing Protocol  
+ All documents must be processed through the central ingestion engine. 
+ Data extraction must maintain 100% character accuracy. 
+ Automated logs are required for every file processed. 
+2. Security & Integrity  
+ No sensitive user data shall be stored in plaintext. 
+ Access to the repository is restricted to authorized project members only. 
+ Any modification to the core parsing logic requires a secondary code review. 
+3. Performance Benchmarks  
+ Processing time for a single-page document must not exceed 2 seconds. 
+ The system must handle concurrent read operations without memory leaks. 
+ Error logs must be generated in real-time for any failed parsing attempts. 
+4. Project Documentation  
+ All code updates must be accompanied by relevant comments. 
+ Version control commits must follow the standard naming convention: [Action] - 
+[Description]. 
+ 
