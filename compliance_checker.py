@@ -1,6 +1,7 @@
 
 import PyPDF2
 import re
+from report_generator import generate_report
 
 # Compliance requirements from sample.pdf
 requirements = [
@@ -40,6 +41,7 @@ def check_compliance(file_path):
 
         passed = 0
         failed = 0
+        results = {}
 
         print("\n===== COMPLIANCE REPORT =====\n")
 
@@ -48,14 +50,19 @@ def check_compliance(file_path):
             if requirement.lower() in document_text:
                 print(f"{number}. PASS: {requirement}")
                 passed += 1
+                results[f"Requirement {number}"] = "PASS"
             else:
                 print(f"{number}. FAIL: {requirement}")
                 failed += 1
+                results[f"Requirement {number}"] = "FAIL"
 
         print("\n===== SUMMARY =====")
         print("Total Requirements:", len(requirements))
         print("Passed:", passed)
         print("Failed:", failed)
+
+        # Generate JSON report
+        generate_report(results)
 
     except Exception as e:
         print("Error:", e)
