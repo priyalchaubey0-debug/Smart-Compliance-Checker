@@ -68,5 +68,6 @@ def check_compliance(file_path):
         print("Error:", e)
 
 
-file_path = input("Enter PDF file name: ")
-check_compliance(file_path)
+if __name__ == "__main__":
+    file_path = input("Enter PDF file name: ")
+    check_compliance(file_path)

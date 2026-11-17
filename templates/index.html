@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Compliance Checker</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #1e293b;
+        }
+
+        header {
+            background: #111c35;
+            color: white;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            font-size: 22px;
+        }
+
+        header span {
+            color: #60a5fa;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        .upload-card, .results-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .upload-area {
+            border: 2px dashed #93b4e8;
+            background: #f8fbff;
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            margin: 22px 0;
+        }
+
+        .upload-area h3 {
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        input[type="file"] {
+            max-width: 100%;
+            padding: 10px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+        }
+
+        .stat p {
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .stat h2 {
+            font-size: 28px;
+        }
+
+        .pass {
+            color: #16a34a;
+        }
+
+        .fail {
+            color: #dc2626;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 16px 0;
+            border-bottom: 1px solid #e5e7eb;
+            line-height: 1.5;
+        }
+
+        .status {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .result-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Smart <span>Compliance</span> Checker</h2>
+    <p>PDF Analysis Dashboard</p>
+</header>
+
+<div class="container">
+
+    <section class="welcome">
+        <h1>Compliance Dashboard</h1>
+        <p>Upload your PDF document and check it against predefined compliance requirements.</p>
+    </section>
+
+    <section class="upload-card">
+        <h2>Upload Document</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="upload-area">
+                <h3>Select Your PDF Document</h3>
+                <p>Choose a PDF file from your computer to begin analysis.</p>
+                <input type="file" name="pdf" accept=".pdf" required>
+            </div>
+
+            <button type="submit">Run Compliance Check</button>
+        </form>
+    </section>
+
+    {% if results %}
+    <div class="stats">
+
+        <div class="stat">
+            <p>Total Requirements</p>
+            <h2>{{ results|length }}</h2>
+        </div>
+
+        <div class="stat">
+            <p>Passed Requirements</p>
+            <h2 class="pass">
+                {{ results|selectattr("status", "equalto", "PASS")|list|length }}
+            </h2>
+        </div>
+
+        <div class="stat">
+            <p>Failed Requirements</p>
+            <h2 class="fail">
+                {{ results|selectattr("status", "equalto", "FAIL")|list|length }}
+            </h2>
+        </div>
+
+    </div>
+
+    <section class="results-card">
+        <h2>Compliance Results</h2>
+
+        {% for item in results %}
+        <div class="result-row">
+            <p>{{ loop.index }}. {{ item.requirement }}</p>
+
+            <span class="status {{ 'pass' if item.status == 'PASS' else 'fail' }}">
+                {{ item.status }}
+            </span>
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+</div>
+
+<footer>
+    Smart Compliance Checker | Automated PDF Compliance Analysis
+</footer>
+
+</body>
+</html>
